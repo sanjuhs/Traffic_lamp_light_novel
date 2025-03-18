@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reincarnated as a Traffic Light | A Dark Fantasy Isekai</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Palatino', Georgia, serif;
+        }
+
+        /* Theme variables */
+        :root {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --navbar-bg: #0a0a0a;
+            --border-color: #333;
+            --accent-color: #f4d35e;
+            --secondary-color: #a0a0a0;
+            --traffic-bg: #333;
+        }
+
+        /* Light theme variables */
+        [data-theme="light"] {
+            --bg-color: #f5f5f5;
+            --text-color: #1a1a1a;
+            --navbar-bg: #ffffff;
+            --border-color: #dddddd;
+            --accent-color: #e67700;
+            --secondary-color: #555555;
+            --traffic-bg: #444;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        /* Navigation bar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--navbar-bg);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .search-box {
+            font-weight: bold;
+            letter-spacing: 1px;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .logo {
+            text-align: center;
+            flex: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 60px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            flex: 1;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+
+        /* Main content */
+        .main-content {
+            margin-top: 100px;
+            padding: 2rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .welcome-text {
+            margin-bottom: 2rem;
+            font-size: 1.2rem;
+            line-height: 1.8;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: var(--navbar-bg);
+            padding: 0.8rem 1.5rem;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 3px;
+            transition: background-color 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .cta-button:hover {
+            opacity: 0.9;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-color);
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: var(--secondary-color);
+        }
+
+        /* Traffic light animation */
+        .traffic-light {
+            width: 100px;
+            height: 250px;
+            background-color: var(--traffic-bg);
+            border-radius: 10px;
+            margin: 0 auto 2rem auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .light {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+        }
+
+        .red {
+            background-color: #ff3333;
+            animation: pulse 2s infinite;
+        }
+
+        .yellow {
+            background-color: #ffcc00;
+            animation: pulse 2s infinite 0.6s;
+        }
+
+        .green {
+            background-color: #33cc33;
+            animation: pulse 2s infinite 1.2s;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 0.4;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        /* Small traffic light for navbar */
+        .mini-traffic-light {
+            width: 30px;
+            height: 80px;
+            background-color: var(--traffic-bg);
+            border-radius: 6px;
+            padding: 5px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .mini-light {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+
+        /* Theme toggle */
+        .theme-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--text-color);
+            transition: transform 0.3s ease, fill 0.3s ease;
+        }
+
+        .theme-toggle:hover svg {
+            transform: rotate(15deg);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="search-box">Reincarnated as a Traffic Light</div>
+        <div class="logo">
+            <div class="mini-traffic-light">
+                <div class="mini-light red"></div>
+                <div class="mini-light yellow"></div>
+                <div class="mini-light green"></div>
+            </div>
+        </div>
+        <div class="nav-links">
+            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path
+                        d="M12 11.807A9.002 9.002 0 0 1 10.049 2a9.942 9.942 0 0 0-5.12 2.735c-3.905 3.905-3.905 10.237 0 14.142 3.906 3.906 10.237 3.905 14.143 0a9.944 9.944 0 0 0 2.735-5.119A9.003 9.003 0 0 1 12 11.807z">
+                    </path>
+                </svg>
+                <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="display:none;">
+                    <path
+                        d="M6.995 12c0 2.761 2.246 5.007 5.007 5.007s5.007-2.246 5.007-5.007-2.246-5.007-5.007-5.007S6.995 9.239 6.995 12zM11 19h2v3h-2zm0-17h2v3h-2zm-9 9h3v2H2zm17 0h3v2h-3zM5.637 19.778l-1.414-1.414 2.121-2.121 1.414 1.414zM16.242 6.344l2.122-2.122 1.414 1.414-2.122 2.122zM6.344 7.759 4.223 5.637l1.415-1.414 2.12 2.122zm13.434 10.605-1.414 1.414-2.122-2.122 1.414-1.414z">
+                    </path>
+                </svg>
+            </button>
+            <a href="first-chapter.html">FIRST</a>
+            <a href="latest-chapter.html">LATEST</a>
+            <a href="chapters.html">CHAPTERS</a>
+            <a href="lorebooks.html">LORE</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h1 class="title">Reincarnated as a Traffic Light</h1>
+        <h2 class="subtitle">A Dark Fantasy Isekai of Light and Shadow</h2>
+
+        <div class="welcome-text">
+            <p>Welcome to Lumina, a world where the sun no longer shines. Where Gothic architecture pierces an eternally
+                twilight sky, and the boundaries between technology and cosmic horror blur beneath the watchful eyes of
+                the Candlemakers Guild.</p>
+            <br />
+
+            <p>Drawing inspiration from the atmospheric dread of Dark Souls, the Victorian gothic aesthetic of
+                Bloodborne, and the reality-warping terror of cosmic horror, "Reincarnated as a Traffic Light" takes you
+                to a world where steampunk contraptions and eldritch magics collide under a perpetual shroud of
+                darkness.</p><br />
+
+            <p>Follow the journey of Jin Chen, once a brilliant traffic engineer, now transformed into a sentient
+                traffic signal after a mysterious Event. Experience reality through his three-phase perception as he
+                navigates a web of political intrigue, forbidden knowledge, and existential horror—all while bound to an
+                intersection in a city teetering on the edge of oblivion.</p><br />
+
+            <p>In Lumina, light is currency, shadows harbor entities beyond comprehension, and a traffic light might be
+                humanity's unlikely savior.</p><br />
+
+            <a href="first-chapter.html" class="cta-button">Begin Reading &rarr;</a>
+
+            <div class="traffic-light">
+                <div class="light red"></div>
+                <div class="light yellow"></div>
+                <div class="light green"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('theme-toggle');
+        const moonIcon = document.getElementById('moon-icon');
+        const sunIcon = document.getElementById('sun-icon');
+        const htmlElement = document.documentElement;
+
+        themeToggle.addEventListener('click', () => {
+            if (htmlElement.getAttribute('data-theme') === 'dark') {
+                htmlElement.setAttribute('data-theme', 'light');
+                moonIcon.style.display = 'none';
+                sunIcon.style.display = 'block';
+            } else {
+                htmlElement.setAttribute('data-theme', 'dark');
+                moonIcon.style.display = 'block';
+                sunIcon.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+
+</html>

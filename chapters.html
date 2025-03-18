@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapters | Reincarnated as a Traffic Light</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Palatino', Georgia, serif;
+        }
+
+        /* Theme variables */
+        :root {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --navbar-bg: #0a0a0a;
+            --border-color: #333;
+            --accent-color: #f4d35e;
+            --secondary-color: #a0a0a0;
+            --traffic-bg: #333;
+            --card-bg: #1e1e1e;
+        }
+
+        /* Light theme variables */
+        [data-theme="light"] {
+            --bg-color: #f5f5f5;
+            --text-color: #1a1a1a;
+            --navbar-bg: #ffffff;
+            --border-color: #dddddd;
+            --accent-color: #e67700;
+            --secondary-color: #555555;
+            --traffic-bg: #444;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        /* Navigation bar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--navbar-bg);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .search-box {
+            font-weight: bold;
+            letter-spacing: 1px;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .logo {
+            text-align: center;
+            flex: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 60px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            flex: 1;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+
+        /* Main content */
+        .main-content {
+            margin-top: 100px;
+            padding: 2rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--accent-color);
+            text-align: center;
+        }
+
+        /* Chapter list */
+        .chapter-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .chapter-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .chapter-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .chapter-card a {
+            display: block;
+            padding: 1.5rem;
+            text-decoration: none;
+            color: var(--text-color);
+        }
+
+        .chapter-number {
+            font-size: 1.2rem;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .chapter-title {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+        }
+
+        .chapter-excerpt {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .status-message {
+            text-align: center;
+            padding: 2rem;
+            font-style: italic;
+            color: var(--secondary-color);
+        }
+
+        /* Small traffic light for navbar */
+        .mini-traffic-light {
+            width: 30px;
+            height: 80px;
+            background-color: var(--traffic-bg);
+            border-radius: 6px;
+            padding: 5px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .mini-light {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+
+        .red {
+            background-color: #ff3333;
+            animation: pulse 2s infinite;
+        }
+
+        .yellow {
+            background-color: #ffcc00;
+            animation: pulse 2s infinite 0.6s;
+        }
+
+        .green {
+            background-color: #33cc33;
+            animation: pulse 2s infinite 1.2s;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 0.4;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        /* Theme toggle */
+        .theme-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--text-color);
+            transition: transform 0.3s ease, fill 0.3s ease;
+        }
+
+        .theme-toggle:hover svg {
+            transform: rotate(15deg);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="search-box">
+            <a href="index.html" style="text-decoration: none; color: var(--text-color);">
+                Reincarnated as a Traffic Light
+            </a>
+        </div>
+        <div class="logo">
+            <div class="mini-traffic-light">
+                <div class="mini-light red"></div>
+                <div class="mini-light yellow"></div>
+                <div class="mini-light green"></div>
+            </div>
+        </div>
+        <div class="nav-links">
+            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path
+                        d="M12 11.807A9.002 9.002 0 0 1 10.049 2a9.942 9.942 0 0 0-5.12 2.735c-3.905 3.905-3.905 10.237 0 14.142 3.906 3.906 10.237 3.905 14.143 0a9.944 9.944 0 0 0 2.735-5.119A9.003 9.003 0 0 1 12 11.807z">
+                    </path>
+                </svg>
+                <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="display:none;">
+                    <path
+                        d="M6.995 12c0 2.761 2.246 5.007 5.007 5.007s5.007-2.246 5.007-5.007-2.246-5.007-5.007-5.007S6.995 9.239 6.995 12zM11 19h2v3h-2zm0-17h2v3h-2zm-9 9h3v2H2zm17 0h3v2h-3zM5.637 19.778l-1.414-1.414 2.121-2.121 1.414 1.414zM16.242 6.344l2.122-2.122 1.414 1.414-2.122 2.122zM6.344 7.759 4.223 5.637l1.415-1.414 2.12 2.122zm13.434 10.605-1.414 1.414-2.122-2.122 1.414-1.414z">
+                    </path>
+                </svg>
+            </button>
+            <a href="chapterdisplay.html?chapter=1">FIRST</a>
+            <a href="chapters.html">CHAPTERS</a>
+            <a href="lorebooks.html">LORE</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h1 class="page-title">Chapters</h1>
+
+        <div id="chapter-list" class="chapter-list">
+            <div class="status-message">Loading chapters...</div>
+        </div>
+    </div>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('theme-toggle');
+        const moonIcon = document.getElementById('moon-icon');
+        const sunIcon = document.getElementById('sun-icon');
+        const htmlElement = document.documentElement;
+
+        themeToggle.addEventListener('click', () => {
+            if (htmlElement.getAttribute('data-theme') === 'dark') {
+                htmlElement.setAttribute('data-theme', 'light');
+                moonIcon.style.display = 'none';
+                sunIcon.style.display = 'block';
+            } else {
+                htmlElement.setAttribute('data-theme', 'dark');
+                moonIcon.style.display = 'block';
+                sunIcon.style.display = 'none';
+            }
+        });
+
+        // Chapter list loading
+        document.addEventListener('DOMContentLoaded', async function () {
+            const chapterList = document.getElementById('chapter-list');
+
+            try {
+                // This would normally be fetched from a server
+                // For this example, we'll just check for chapters 1-9
+                const chapterTitles = {
+                    1: "Red Light",
+                    2: "Flicker",
+                    3: "Power Surge",
+                    4: "Dark Democracy",
+                    5: "False Light",
+                    6: "Status Quo",
+                    7: "Candlelight Tales",
+                    8: "Dark Contracts",
+                    9: "Wax and Wane"
+                };
+
+                let chaptersHTML = '';
+
+                for (let i = 1; i <= 9; i++) {
+                    try {
+                        const response = await fetch(`lorebook/chapter${i}.md`);
+
+                        if (!response.ok) {
+                            continue;
+                        }
+
+                        const markdown = await response.text();
+                        let excerpt = markdown.replace(/^#.*$/m, '').trim().substring(0, 150) + '...';
+
+                        chaptersHTML += `
+                            <div class="chapter-card">
+                                <a href="chapterdisplay.html?chapter=${i}">
+                                    <div class="chapter-number">Chapter ${i}</div>
+                                    <div class="chapter-title">${chapterTitles[i] || 'Untitled'}</div>
+                                    <div class="chapter-excerpt">${excerpt}</div>
+                                </a>
+                            </div>
+                        `;
+                    } catch (error) {
+                        console.error(`Error checking chapter ${i}:`, error);
+                    }
+                }
+
+                if (chaptersHTML) {
+                    chapterList.innerHTML = chaptersHTML;
+                } else {
+                    chapterList.innerHTML = '<div class="status-message">No chapters found</div>';
+                }
+
+            } catch (error) {
+                console.error('Error loading chapter list:', error);
+                chapterList.innerHTML = `<div class="status-message">Error loading chapters: ${error.message}</div>`;
+            }
+        });
+    </script>
+</body>
+
+</html>

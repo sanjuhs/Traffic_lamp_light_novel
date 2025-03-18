@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lore Books | Reincarnated as a Traffic Light</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Palatino', Georgia, serif;
+        }
+
+        /* Theme variables */
+        :root {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --navbar-bg: #0a0a0a;
+            --border-color: #333;
+            --accent-color: #f4d35e;
+            --secondary-color: #a0a0a0;
+            --traffic-bg: #333;
+            --card-bg: #1e1e1e;
+        }
+
+        /* Light theme variables */
+        [data-theme="light"] {
+            --bg-color: #f5f5f5;
+            --text-color: #1a1a1a;
+            --navbar-bg: #ffffff;
+            --border-color: #dddddd;
+            --accent-color: #e67700;
+            --secondary-color: #555555;
+            --traffic-bg: #444;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        /* Navigation bar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--navbar-bg);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .search-box {
+            font-weight: bold;
+            letter-spacing: 1px;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .logo {
+            text-align: center;
+            flex: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 60px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            flex: 1;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+
+        /* Main content */
+        .main-content {
+            margin-top: 100px;
+            padding: 2rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--accent-color);
+            text-align: center;
+        }
+
+        /* Lore list */
+        .lore-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .lore-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .lore-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .lore-card-header {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .lore-title {
+            font-size: 1.4rem;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .lore-description {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+        }
+
+        .lore-content {
+            padding: 1.5rem;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            flex-grow: 1;
+            display: -webkit-box;
+            -webkit-line-clamp: 5;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .lore-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--border-color);
+            text-align: right;
+        }
+
+        .lore-button {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: var(--accent-color);
+            color: var(--navbar-bg);
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 3px;
+            font-size: 0.9rem;
+            transition: opacity 0.3s ease;
+        }
+
+        .lore-button:hover {
+            opacity: 0.9;
+        }
+
+        .status-message {
+            text-align: center;
+            padding: 2rem;
+            font-style: italic;
+            color: var(--secondary-color);
+        }
+
+        /* Lore detail view */
+        .lore-detail {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            display: none;
+        }
+
+        .lore-detail h2 {
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+
+        .lore-detail-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .lore-detail-content p {
+            margin-bottom: 1rem;
+        }
+
+        .lore-back-button {
+            display: inline-block;
+            padding: 0.6rem 1.2rem;
+            background-color: var(--accent-color);
+            color: var(--navbar-bg);
+            text-decoration: none;
+            border-radius: 3px;
+            font-weight: bold;
+            transition: opacity 0.3s ease;
+            margin-top: 1.5rem;
+            cursor: pointer;
+        }
+
+        .lore-back-button:hover {
+            opacity: 0.9;
+        }
+
+        /* Small traffic light for navbar */
+        .mini-traffic-light {
+            width: 30px;
+            height: 80px;
+            background-color: var(--traffic-bg);
+            border-radius: 6px;
+            padding: 5px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .mini-light {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+
+        .red {
+            background-color: #ff3333;
+            animation: pulse 2s infinite;
+        }
+
+        .yellow {
+            background-color: #ffcc00;
+            animation: pulse 2s infinite 0.6s;
+        }
+
+        .green {
+            background-color: #33cc33;
+            animation: pulse 2s infinite 1.2s;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 0.4;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        /* Theme toggle */
+        .theme-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--text-color);
+            transition: transform 0.3s ease, fill 0.3s ease;
+        }
+
+        .theme-toggle:hover svg {
+            transform: rotate(15deg);
+        }
+    </style>
+    <!-- Include marked.js for Markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="search-box">
+            <a href="index.html" style="text-decoration: none; color: var(--text-color);">
+                Reincarnated as a Traffic Light
+            </a>
+        </div>
+        <div class="logo">
+            <div class="mini-traffic-light">
+                <div class="mini-light red"></div>
+                <div class="mini-light yellow"></div>
+                <div class="mini-light green"></div>
+            </div>
+        </div>
+        <div class="nav-links">
+            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path
+                        d="M12 11.807A9.002 9.002 0 0 1 10.049 2a9.942 9.942 0 0 0-5.12 2.735c-3.905 3.905-3.905 10.237 0 14.142 3.906 3.906 10.237 3.905 14.143 0a9.944 9.944 0 0 0 2.735-5.119A9.003 9.003 0 0 1 12 11.807z">
+                    </path>
+                </svg>
+                <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="display:none;">
+                    <path
+                        d="M6.995 12c0 2.761 2.246 5.007 5.007 5.007s5.007-2.246 5.007-5.007-2.246-5.007-5.007-5.007S6.995 9.239 6.995 12zM11 19h2v3h-2zm0-17h2v3h-2zm-9 9h3v2H2zm17 0h3v2h-3zM5.637 19.778l-1.414-1.414 2.121-2.121 1.414 1.414zM16.242 6.344l2.122-2.122 1.414 1.414-2.122 2.122zM6.344 7.759 4.223 5.637l1.415-1.414 2.12 2.122zm13.434 10.605-1.414 1.414-2.122-2.122 1.414-1.414z">
+                    </path>
+                </svg>
+            </button>
+            <a href="chapterdisplay.html?chapter=1">FIRST</a>
+            <a href="chapters.html">CHAPTERS</a>
+            <a href="lorebooks.html">LORE</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Lore detail view (hidden by default) -->
+        <div id="lore-detail" class="lore-detail">
+            <h2 id="lore-detail-title">Lore Title</h2>
+            <div id="lore-detail-content" class="lore-detail-content">
+                <!-- Content will be loaded here -->
+            </div>
+            <button id="lore-back-button" class="lore-back-button">Back to Lore Books</button>
+        </div>
+
+        <!-- Lore list view -->
+        <div id="lore-list-view">
+            <h1 class="page-title">Lore Books</h1>
+            <div id="lore-grid" class="lore-grid">
+                <div class="status-message">Loading lore books...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('theme-toggle');
+        const moonIcon = document.getElementById('moon-icon');
+        const sunIcon = document.getElementById('sun-icon');
+        const htmlElement = document.documentElement;
+
+        themeToggle.addEventListener('click', () => {
+            if (htmlElement.getAttribute('data-theme') === 'dark') {
+                htmlElement.setAttribute('data-theme', 'light');
+                moonIcon.style.display = 'none';
+                sunIcon.style.display = 'block';
+            } else {
+                htmlElement.setAttribute('data-theme', 'dark');
+                moonIcon.style.display = 'block';
+                sunIcon.style.display = 'none';
+            }
+        });
+
+        // Lore books loading and display
+        document.addEventListener('DOMContentLoaded', async function () {
+            const loreGrid = document.getElementById('lore-grid');
+            const loreDetail = document.getElementById('lore-detail');
+            const loreListView = document.getElementById('lore-list-view');
+            const loreDetailTitle = document.getElementById('lore-detail-title');
+            const loreDetailContent = document.getElementById('lore-detail-content');
+            const loreBackButton = document.getElementById('lore-back-button');
+
+            // Get lore from URL if specified
+            const urlParams = new URLSearchParams(window.location.search);
+            const loreParam = urlParams.get('lore');
+
+            // List of lore files to check for
+            const loreFiles = [
+                {
+                    id: 'introduction',
+                    title: 'Introduction',
+                    description: 'A primer on the world of Lumina and its dark history',
+                    file: 'lorebook/introduction.md'
+                },
+                {
+                    id: 'characters',
+                    title: 'Characters',
+                    description: 'Key individuals in the story of Lumina',
+                    file: 'lorebook/characters.md'
+                },
+                {
+                    id: 'lore',
+                    title: 'World Lore',
+                    description: 'Deep history and cosmic truths of the world',
+                    file: 'lorebook/lore.md'
+                },
+                {
+                    id: 'summaries',
+                    title: 'Story Summaries',
+                    description: 'Chapter summaries and plot progression',
+                    file: 'lorebook/summaries/chapters1-9.md'
+                }
+            ];
+
+            // Function to display a specific lore entry
+            async function displayLoreDetail(loreFile) {
+                try {
+                    const response = await fetch(loreFile.file);
+
+                    if (!response.ok) {
+                        loreDetailContent.innerHTML = `<p>Error loading lore: ${response.status}</p>`;
+                        return;
+                    }
+
+                    const markdown = await response.text();
+                    const content = marked.parse(markdown);
+
+                    loreDetailTitle.textContent = loreFile.title;
+                    loreDetailContent.innerHTML = content;
+
+                    // Update URL without refreshing page
+                    history.pushState(null, '', `lorebooks.html?lore=${loreFile.id}`);
+
+                    // Show detail view, hide list view
+                    loreDetail.style.display = 'block';
+                    loreListView.style.display = 'none';
+
+                    // Scroll to top
+                    window.scrollTo(0, 0);
+
+                } catch (error) {
+                    console.error('Error loading lore:', error);
+                    loreDetailContent.innerHTML = `<p>Error loading lore: ${error.message}</p>`;
+                }
+            }
+
+            // Set up back button
+            loreBackButton.addEventListener('click', () => {
+                loreDetail.style.display = 'none';
+                loreListView.style.display = 'block';
+                history.pushState(null, '', 'lorebooks.html');
+            });
+
+            // Check if a specific lore was requested in URL
+            if (loreParam) {
+                const requestedLore = loreFiles.find(lore => lore.id === loreParam);
+                if (requestedLore) {
+                    await displayLoreDetail(requestedLore);
+                } else {
+                    // If lore not found, show list view
+                    loreDetail.style.display = 'none';
+                    loreListView.style.display = 'block';
+                }
+            } else {
+                // Show list view by default
+                loreDetail.style.display = 'none';
+                loreListView.style.display = 'block';
+            }
+
+            // Load and display lore grid
+            try {
+                let loreHTML = '';
+
+                for (const loreFile of loreFiles) {
+                    try {
+                        const response = await fetch(loreFile.file);
+
+                        if (!response.ok) {
+                            console.warn(`Lore file not found: ${loreFile.file}`);
+                            continue;
+                        }
+
+                        const markdown = await response.text();
+                        let excerpt = markdown.replace(/^#.*$/m, '').trim().substring(0, 200) + '...';
+
+                        loreHTML += `
+                            <div class="lore-card" data-lore-id="${loreFile.id}">
+                                <div class="lore-card-header">
+                                    <div class="lore-title">${loreFile.title}</div>
+                                    <div class="lore-description">${loreFile.description}</div>
+                                </div>
+                                <div class="lore-content">${excerpt}</div>
+                                <div class="lore-footer">
+                                    <a href="#" class="lore-button" data-lore-id="${loreFile.id}">Read More</a>
+                                </div>
+                            </div>
+                        `;
+                    } catch (error) {
+                        console.error(`Error checking lore file ${loreFile.file}:`, error);
+                    }
+                }
+
+                if (loreHTML) {
+                    loreGrid.innerHTML = loreHTML;
+
+                    // Add event listeners to Read More buttons
+                    document.querySelectorAll('.lore-button').forEach(button => {
+                        button.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            const loreId = button.getAttribute('data-lore-id');
+                            const loreFile = loreFiles.find(lore => lore.id === loreId);
+                            if (loreFile) {
+                                displayLoreDetail(loreFile);
+                            }
+                        });
+                    });
+
+                    // Make whole card clickable
+                    document.querySelectorAll('.lore-card').forEach(card => {
+                        card.addEventListener('click', (e) => {
+                            if (!e.target.classList.contains('lore-button')) {
+                                const loreId = card.getAttribute('data-lore-id');
+                                const loreFile = loreFiles.find(lore => lore.id === loreId);
+                                if (loreFile) {
+                                    displayLoreDetail(loreFile);
+                                }
+                            }
+                        });
+                    });
+
+                } else {
+                    loreGrid.innerHTML = '<div class="status-message">No lore books found</div>';
+                }
+
+            } catch (error) {
+                console.error('Error loading lore books:', error);
+                loreGrid.innerHTML = `<div class="status-message">Error loading lore books: ${error.message}</div>`;
+            }
+        });
+    </script>
+</body>
+
+</html>
