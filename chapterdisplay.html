@@ -339,7 +339,7 @@
 
             try {
                 // Fetch the markdown file
-                const response = await fetch(`lorebook/chapter${chapterNum}.md`);
+                const response = await fetch(`chapters/chapter${chapterNum}.md`);
 
                 if (!response.ok) {
                     if (response.status === 404) {
