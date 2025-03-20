@@ -363,7 +363,7 @@
 
                 // Check if next chapter exists
                 try {
-                    const nextCheck = await fetch(`lorebook/chapter${parseInt(chapterNum) + 1}.md`);
+                    const nextCheck = await fetch(`chapters/chapter${parseInt(chapterNum) + 1}.md`);
                     if (!nextCheck.ok) {
                         nextChapter.classList.add('disabled');
                         nextChapter.href = '#';
